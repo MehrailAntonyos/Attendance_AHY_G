@@ -71,7 +71,7 @@ import { environment } from '../environments/environment';
 
 // الكومنت اللى تحته بالظبط لااااااااازم يتكتب علشان يتجاهله و ميطلعش ايرور فده مش رفاهيه
 // @ts-ignore
-const primeNgLicenseKey = import.meta.env['NG_APP_PRIMENG_LICENSE'] || ''; //عملنا ده بدل اللى تحت علشان اللى تحت مش شغال فى ال build مع موقع vercel اللى رفعت عليه المشروع 
+// const primeNgLicenseKey = import.meta.env['NG_APP_PRIMENG_LICENSE'] || ''; //عملنا ده بدل اللى تحت علشان اللى تحت مش شغال فى ال build مع موقع vercel اللى رفعت عليه المشروع 
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -88,8 +88,8 @@ export const appConfig: ApplicationConfig = {
 
       },
       // VERYYYYYYYYYYYYYYYYYYYYYYYY IMPORTANTTTTTTTTTTTTTTTTTTTT
-      // license: environment.primeNgLicense, // استخدام المتغير من الـ env
-      license: primeNgLicenseKey // استخدام المفتاح من متغيرات بيئة Vercel
+      license: environment.primeNgLicense, // استخدام المتغير من الـ env
+      // license: primeNgLicenseKey // استخدام المفتاح من متغيرات بيئة Vercel
 
       
       // license: process.env['NG_APP_PRIMENG_LICENSE'], 
