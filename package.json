@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "node -e \"const fs = require('fs'); fs.writeFileSync('src/environments/environment.ts', `export const environment = { production: true, primeNgLicense: '${process.env.NG_APP_PRIMENG_LICENSE || ''}' };\");\" && ng build",
+    "build": "node generate-env.js && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:Attendance_AHY_G": "node dist/Attendance_AHY_G/server/server.mjs"
