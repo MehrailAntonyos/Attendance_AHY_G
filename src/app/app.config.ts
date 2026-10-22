@@ -65,6 +65,8 @@ import {
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { environment } from '../environments/environment';
+// import { env } from 'process';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -81,7 +83,9 @@ export const appConfig: ApplicationConfig = {
 
       },
       // VERYYYYYYYYYYYYYYYYYYYYYYYY IMPORTANTTTTTTTTTTTTTTTTTTTT
-      license: 'eyJpZCI6IjQ1NTg4YjY5LTc5YjktNDk1Ny1hNjkzLTEzNTIwMjUzYTQwZCIsInByb2R1Y3QiOiJwcmltZXVpIiwidGllciI6ImNvbW11bml0eSIsInR5cGUiOiJkZXYiLCJpYXQiOjE3OTI2NTc2NTUsImV4cCI6MTgyNDE5MzY1NX0.XxNkIlAmRV9gIPQHyqsPjdAq3fao417GMyve0xaaN8wa5nb4w-SdmBMxrVNjLMi5PM4PjON-i0ZT00O_Gk3LCQ',
+      license: environment.primeNgLicense, // استخدام المتغير من الـ env
+      // license: process.env['NG_APP_PRIMENG_LICENSE'], 
+      // //عشان تقرأي المتغيرات دي في الكود، بتقدري توصلي لها في app.config.ts عن طريق process.env['NG_APP_PRIMENG_LICENSE'] (أو بالطريقة المعيارية المتاحة في حزم الـ build الحديثة مثل @angular/build
 
 
       // ripple: true // تفعيل الـ ripple effect وتجنب رسائل الترخيص للـ Community edition
