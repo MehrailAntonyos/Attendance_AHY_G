@@ -88,7 +88,7 @@ export const appConfig: ApplicationConfig = {
 
       },
       // VERYYYYYYYYYYYYYYYYYYYYYYYY IMPORTANTTTTTTTTTTTTTTTTTTTT
-      license: environment.primeNgLicense, // استخدام المتغير من الـ env
+      license: environment.NG_APP_PRIMENG_LICENSE, // استخدام المتغير من الـ env
       // license: primeNgLicenseKey // استخدام المفتاح من متغيرات بيئة Vercel
 
       

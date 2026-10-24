@@ -44,10 +44,10 @@ __screenshots__/
 Thumbs.db
 
 
-# Environments
-# السماح برفع ملف النموذج فقط (تأكدي إنه مش معموله ignore)
-# منع رفع الملفات الحقيقية
+## Environments
+## السماح برفع ملف النموذج فقط (تأكدي إنه مش معموله ignore)
+## منع رفع الملفات الحقيقية
 #/src/environments/environment.ts
-/src/environments/environment.development.ts
-# ----- OR ----- Env files
-.env
+#/src/environments/environment.development.ts
+## ----- OR ----- Env files
+#.env
