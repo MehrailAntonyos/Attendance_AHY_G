@@ -1,1 +1,18 @@
 @import "primeicons/primeicons.css";
+
+/* .card { */
+  /* --bs-card-border-width: 0;  */
+  /* أو ممكن تخليه شفاف: --bs-card-border-color: transparent; */
+/* } */
+
+.card {
+  border: none !important;
+}
+
+.border-secondary{
+    border: 1px solid rgba(190, 190, 190, 0.5) !important;
+}
+
+/* .w-95{
+  width: 95%;
+} */

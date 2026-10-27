@@ -14,6 +14,10 @@ export const routes: Routes = [
     path: 'persons',
     loadComponent: () => import('./Components/Main/person/person').then(c => c.Person)
   },
+  {
+    path: 'products',
+    loadComponent: () => import('./Components/Main/product/product').then(c => c.Product)
+  },
 //   // مسار بياخد Parameter بنظام الـ Standalone
 //   {
 //     path: 'user-profile/:id',
