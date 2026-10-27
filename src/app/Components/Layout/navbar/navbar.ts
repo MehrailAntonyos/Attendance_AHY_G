@@ -36,6 +36,11 @@ export class Navbar implements OnInit {
         icon: 'pi pi-chart-bar',
         routerLink: ['/persons'],
       },
+       {
+        label: 'Products',
+        icon: 'pi pi-chart-bar',
+        routerLink: ['/products'],
+      },
       {
         label: 'الملف الشخصي',
         icon: 'pi pi-user',
