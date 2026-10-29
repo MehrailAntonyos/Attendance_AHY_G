@@ -380,10 +380,18 @@ import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { InputTextModule } from 'primeng/inputtext';
+
+import { CheckboxModule } from 'primeng/checkbox';
+import { DatePickerModule } from 'primeng/datepicker';
+import { InputMaskModule } from 'primeng/inputmask';
+import { TextareaModule } from 'primeng/textarea';
+
 // import { ProductService } from '@/service/productservice';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { ProductService } from '../../../Service/Product/product-service';
+import { PersonService } from '../../../Service/Person/person-service';
 // import { Product } from '@/domain/product';
+
 
 export interface Product {
   id?: string;
@@ -396,6 +404,23 @@ export interface Product {
   category?: string;
   image?: string;
   rating?: number;
+}
+
+export interface IPerson {
+  id: string;
+  name: string;
+  phone: string;
+  phoneSecondary?: string;
+  checkPhone: boolean;
+  birthDate: string;
+  helper: boolean;
+  city?: string;
+  notes?: string;
+}
+
+interface ICity {
+  id: number;
+  name: string;
 }
 
 interface Column {
@@ -411,7 +436,12 @@ interface ExportColumn {
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ButtonModule, ConfirmDialogModule, DialogModule, SelectModule, FileUploadModule, IconFieldModule, InputIconModule, InputNumberModule, RadioButtonModule, RatingModule, TableModule, TagModule, ToastModule, ToolbarModule, InputTextModule, FormsModule],
+
+  imports: [CommonModule, ButtonModule, ConfirmDialogModule, DialogModule, SelectModule, FileUploadModule,
+    IconFieldModule, InputIconModule, InputNumberModule, RadioButtonModule, RatingModule, TableModule,
+    TagModule, ToastModule, ToolbarModule, InputTextModule, FormsModule, CheckboxModule,
+    DatePickerModule, InputMaskModule, TextareaModule],
+
   providers: [ProductService, MessageService, ConfirmationService],
   selector: 'app-person',
   styleUrl: './person.css',
@@ -421,19 +451,39 @@ interface ExportColumn {
 
 export class Person implements OnInit {
   private productService = inject(ProductService);
+  private perosnService = inject(PersonService); // هل المفروض اعملها call فى ال providers زى اللى فوقيها
+
+
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
+
 
   @ViewChild('dt') table: Table | undefined;
 
   productDialog: boolean = false;
+  personAddEditDialog: boolean = false;
+
   products!: Product[];
+  personsList!: IPerson[];
+
   product!: Product;
+  personObj!: IPerson;
+
   selectedProducts!: Product[] | null;
+  selectedPersons!: IPerson[] | null;
+
   submitted: boolean = false;
   statuses!: any[];
   cols!: Column[];
   exportColumns!: ExportColumn[];
+
+  // checkedPhone: boolean = false;
+  // birthDate: Date | undefined;
+  // helper: boolean = false;
+
+  cities: ICity[] = [];
+  // selectedCity: ICity | undefined;
+
 
 
   ngOnInit() {
@@ -449,32 +499,75 @@ export class Person implements OnInit {
     // });
 
 
-    
+
     // استقبال البيانات مباشرة بشكل Synchronous
     this.products = this.productService.getProductsData();
-    console.log("products: ", this.productService.getProductsData());
-
     console.log("products in person page: ", this.products);
+
+    this.personsList = this.perosnService.getPersons();
+    console.log("persons in person page: ", this.personsList);
+
 
     this.statuses = [
       { label: 'INSTOCK', value: 'instock' },
       { label: 'LOWSTOCK', value: 'lowstock' },
       { label: 'OUTOFSTOCK', value: 'outofstock' }
     ];
-    this.cols = [
-      { field: 'code', header: 'Code', customExportHeader: 'Product Code' },
-      { field: 'name', header: 'Name' },
-      { field: 'image', header: 'Image' },
-      { field: 'price', header: 'Price' },
-      { field: 'category', header: 'Category' }
+
+    this.cities = [
+      { id: 1, name: 'Aswan' },
+      { id: 2, name: 'Abo Simple' },
+      { id: 3, name: 'Edfu' },
+      { id: 4, name: 'Draw' },
+      { id: 5, name: 'Other' },
     ];
-    this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
+
+    // this.cols = [
+    //   { field: 'code', header: 'Code', customExportHeader: 'Product Code' },
+    //   { field: 'name', header: 'Name' },
+    //   { field: 'image', header: 'Image' },
+    //   { field: 'price', header: 'Price' },
+    //   { field: 'category', header: 'Category' }
+    // ];
+    this.cols = [
+      { field: 'name', header: 'Name' },
+      { field: 'phone', header: 'Phone' },
+      { field: 'phoneSecondary', header: 'Phone Secondary' },
+      { field: 'checkPhone', header: 'Check Phone' },
+      { field: 'birthDate', header: 'Birth Date' },
+      { field: 'helper', header: 'Helper' },
+      { field: 'city', header: 'City' },
+      { field: 'notes', header: 'Notes' }
+    ];
+
+    this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field })); // for export fun and table header
   }
 
   openNew() {
-    this.product = {};
+
+    // this.product = {};
+    this.personObj = {
+      id: '',
+      name: '',
+      phone: '',
+      phoneSecondary: '',
+      checkPhone: false,
+      birthDate: '',
+      helper: false,
+      city: '',
+      notes: '',
+
+    };
+
     this.submitted = false;
-    this.productDialog = true;
+    // this.productDialog = true;
+    this.personAddEditDialog = true;
+  }
+
+  editPerson(person: IPerson) {
+    console.log("edit person: ", person);
+    this.personObj = { ...person };
+    this.personAddEditDialog = true;
   }
 
   editProduct(product: Product) {
@@ -510,7 +603,9 @@ export class Person implements OnInit {
   }
 
   hideDialog() {
-    this.productDialog = false;
+    // this.productDialog = false;
+    this.personAddEditDialog = false;
+
     this.submitted = false;
   }
 
@@ -541,10 +636,54 @@ export class Person implements OnInit {
     });
   }
 
+  deletePerson(person: IPerson) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete ' + person.name + '?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      rejectButtonProps: {
+        label: 'No',
+        severity: 'secondary',
+        variant: 'text'
+      },
+      acceptButtonProps: {
+        severity: 'danger',
+        label: 'Yes'
+      },
+      accept: () => {
+        // this.products = this.products.filter((val) => val.id !== product.id);
+        this.personsList = this.personsList.filter((val) => val.id !== person.id);
+
+        // this.product = {};
+        this.personObj = {
+          id: '',
+          name: '',
+          phone: '',
+          phoneSecondary: '',
+          checkPhone: false,
+          birthDate: '',
+          helper: false,
+          city: '',
+          notes: '',
+
+        };
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Person Deleted',
+          life: 3000
+        });
+      }
+    });
+  }
+
   findIndexById(id: string): number {
     let index = -1;
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i].id === id) {
+    // for (let i = 0; i < this.products.length; i++) {
+    for (let i = 0; i < this.personsList.length; i++) {
+      // if (this.products[i].id === id) {
+      if (this.personsList[i].id === id) {
         index = i;
         break;
       }
@@ -603,6 +742,49 @@ export class Person implements OnInit {
       this.products = [...this.products];
       this.productDialog = false;
       this.product = {};
+    }
+  }
+
+  savePerson() {
+    this.submitted = true;
+
+    // if (this.product.name?.trim()) {
+    if (this.personObj.name?.trim()) {
+      if (this.personObj.id) {
+        this.personsList[this.findIndexById(this.personObj.id)] = this.personObj;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Person Updated',
+          life: 3000
+        });
+      } else {
+        this.personObj.id = this.createId();
+        // this.personObj.code = this.createId();
+        // this.personObj.image = 'product-placeholder.svg';
+        this.personsList.push(this.personObj);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Person Created',
+          life: 3000
+        });
+      }
+
+      this.personsList = [...this.personsList];
+      this.personAddEditDialog = false;
+      this.personObj = {
+        id: '',
+        name: '',
+        phone: '',
+        phoneSecondary: '',
+        checkPhone: false,
+        birthDate: '',
+        helper: false,
+        city: '',
+        notes: '',
+
+      };
     }
   }
 
